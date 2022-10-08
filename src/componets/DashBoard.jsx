@@ -119,8 +119,8 @@ export class DashBoard extends Component {
           </div>
         </div>
         <div className="flex w-[80vw] justify-center mx-[10vw] my-[5vh] flex-wrap gap-4">
-          <div className="card w-96 bg-base-100 shadow-2xl flex flex-col justify-center">
-            <button>
+          <div className="card w-96 bg-base-100 shadow-2xl flex fill-primary flex-col hover:fill-primary-focus justify-center hover:scale-110 z-10 py-[5vh] animate__animated hover:animate__bounce">
+            <a href={process.env.PUBLIC_URL+"/new"}>
               <svg
                 clipRule="evenodd"
                 fillRule="evenodd"
@@ -128,19 +128,19 @@ export class DashBoard extends Component {
                 strokeMiterlimit="2"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
-                className=" w-1/2 m-auto fill-primary hover:fill-primary-focus"
+                className=" w-1/2 m-auto fill-inherit "
               >
                 <path
                   d="m12.002 2c5.518 0 9.998 4.48 9.998 9.998 0 5.517-4.48 9.997-9.998 9.997-5.517 0-9.997-4.48-9.997-9.997 0-5.518 4.48-9.998 9.997-9.998zm0 1.5c-4.69 0-8.497 3.808-8.497 8.498s3.807 8.497 8.497 8.497 8.498-3.807 8.498-8.497-3.808-8.498-8.498-8.498zm-.747 7.75h-3.5c-.414 0-.75.336-.75.75s.336.75.75.75h3.5v3.5c0 .414.336.75.75.75s.75-.336.75-.75v-3.5h3.5c.414 0 .75-.336.75-.75s-.336-.75-.75-.75h-3.5v-3.5c0-.414-.336-.75-.75-.75s-.75.336-.75.75z"
                   fillRule="nonzero"
                 />
               </svg>
-            </button>
-            <div className="card-body w-full h-3/4">
-              <h2 className="card-title text-center justify-center">
-                    Add your recipie
-              </h2>
-            </div>
+              <div className="card-body w-full h-3/4">
+                <h2 className="card-title text-center justify-center">
+                  Add your recipie
+                </h2>
+              </div>
+            </a>
           </div>
           {this.state.recipieCards}
         </div>

@@ -8,8 +8,8 @@ export class Navbar extends Component {
                 <a href='#home' className="btn btn-ghost normal-case text-xl">recFood</a>
             </div>
             <div className="flex-none gap-2">
-                <div className="form-control">
-                <input type="text" placeholder="Search" className="input input-bordered" />
+                <div className="form-control ">
+                <input type="text" placeholder="Search" className="input input-bordered max-w-[50vw] overflow-x-hidden" />
                 </div>
                 <div className="dropdown dropdown-end">
                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
