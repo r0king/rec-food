@@ -9,8 +9,8 @@ function App() {
   return (
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
-        <Route path="/" element={<Card />} />
-        <Route path="/table" element={<Install />} />
+        <Route exact path="/" element={<Install />} />
+        <Route path="/ex" element={<Card/>}/>
       </Routes>
     </BrowserRouter>
   );
