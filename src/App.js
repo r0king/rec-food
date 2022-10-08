@@ -1,18 +1,16 @@
-import logo from "./logo.svg";
 import "./App.css";
 import "animate.css/animate.min.css";
-import Card from "./componets/Card";
-import Install from "./componets/Install";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AppRouter from "./componets/AppRouter";
+import Navbar from "./componets/Navbar";
 
 function App() {
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <Routes>
-        <Route exact path="/" element={<Install />} />
-        <Route path="/ex" element={<Card/>}/>
-      </Routes>
-    </BrowserRouter>
+    <>
+        {/* <h1 className="animate__animated animate__fadeInLeft animate__delay-faster ">An animated element</h1>*/}
+
+      <Navbar/>
+      <AppRouter/>
+    </>
   );
 }
 
