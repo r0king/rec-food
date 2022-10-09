@@ -1,14 +1,17 @@
 import React, { Component } from "react";
 import { db } from "../firebase";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc, deleteField } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
-export class DashBoard extends Component {
+export class Mine extends Component {
   constructor(props) {
     super(props);
     this.state = {
       recipies: {},
       recipieCards: [],
+      select: "",
     };
+    this.auth = getAuth();
   }
   componentDidMount() {
     this.unsub = onSnapshot(doc(db, "food", "recipies"), async (doc) => {
@@ -19,18 +22,38 @@ export class DashBoard extends Component {
       });
     });
   }
+  handleDelete = async (e) => {
+    console.log(e);
+    alert("You are going to delete the " + e.target.id);
+    const docRef = await doc(db, "food", "recipies");
+    await updateDoc(docRef, {
+      [e.target.id]: deleteField(),
+    });
+  };
   componentDidUpdate(prevProps, prevState) {
     if (this.state.recipies !== prevState.recipies) {
       let recipieCards = [];
       const recipies = this.state.recipies;
       for (let recipie in recipies) {
-        recipieCards.push(
-          <div className="card w-96 bg-base-100 shadow-xl" key={recipie}>
-            <a href={process.env.PUBLIC_URL + "/r/" + recipie}>
+        if (recipies[recipie].owner === this.auth.currentUser.uid) {
+          recipieCards.push(
+            <div
+              className="card w-96 bg-base-100 shadow-xl "
+              htmlFor="my-modal-6"
+              key={recipie}
+            >
+              {/* <a href={process.env.PUBLIC_URL + "/r/" + recipie}> */}
               <figure>
-                <img src={recipies[recipie].image} alt={recipie} />
+                <img
+                  onClick={this.handleDelete}
+                  src={recipies[recipie].image}
+                  alt={recipie}
+                  id={recipie}
+                  className="hover:blur-lg hover:cursor-pointer"
+                />
               </figure>
               <div className="card-body">
+                <h2 className="card-title">Click card to DELETE</h2>
                 <h2 className="card-title">
                   {recipie}
                   <div className="badge badge-secondary">NEW</div>
@@ -43,9 +66,10 @@ export class DashBoard extends Component {
                   </div>
                 </div>
               </div>
-            </a>
-          </div>
-        );
+              {/* </a> */}
+            </div>
+          );
+        }
       }
       this.setState({
         recipieCards: recipieCards,
@@ -58,6 +82,25 @@ export class DashBoard extends Component {
   render() {
     return (
       <div>
+        <input type="checkbox" id="my-modal-6" className="modal-toggle" />
+        <div className="modal modal-bottom sm:modal-middle">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">
+              You will Be deleteing this recipe{" "}
+            </h3>
+            <p className="py-4">
+              Alert! are you sure you need to delete this recipie
+            </p>
+            <div className="modal-action">
+              <button htmlFor="my-modal-6" className="btn">
+                Yes
+              </button>
+              <button htmlFor="my-modal-6" className="btn">
+                No
+              </button>
+            </div>
+          </div>
+        </div>
         <div className="flex w-[80vw] justify-center mx-[10vw] my-[5vh] flex-wrap gap-4">
           <div className="max-h-80 card w-96 bg-base-100 shadow-2xl flex fill-primary flex-col hover:fill-primary-focus justify-center hover:scale-110 z-10 py-[5vh] animate__animated hover:animate__bounce">
             <a href={process.env.PUBLIC_URL + "/new"}>
@@ -89,4 +132,4 @@ export class DashBoard extends Component {
   }
 }
 
-export default DashBoard;
+export default Mine;

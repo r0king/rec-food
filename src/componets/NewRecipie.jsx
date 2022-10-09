@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 export class NewRecipie extends Component {
   constructor(props) {
@@ -12,7 +13,9 @@ export class NewRecipie extends Component {
       diff: "Easy",
       steps: "",
       incredients: "",
+      image: "",
     };
+    this.auth = getAuth();
     this.handleInputChange = this.handleInputChange.bind(this);
   }
   handleInputChange(event) {
@@ -25,24 +28,28 @@ export class NewRecipie extends Component {
     });
   }
   handleSubmission = async () => {
+    if (!this.state.image) {
+      this.state.image = "https://picsum.photos/seed/picsum/200/300";
+    }
     const recipe = {
       [this.state.heading]: {
         tagline: this.state.tagline,
         cook: this.state.cookTime,
         diff: this.state.diff,
-        method: this.state.steps.split('\n'),
-        ingredients: this.state.incredients.split('\n'),
+        method: this.state.steps.split("\n"),
+        ingredients: this.state.incredients.split("\n"),
+        image: this.state.image,
+        owner:this.auth.currentUser.uid
       },
     };
-    const docRef = doc(db, "food", "recipies")
-    try{
-        const response = await setDoc(docRef,recipe, { merge: true })
-        window.location.pathname = process.env.PUBLIC_URL + '/home'
-
-    }
-    catch(e){
-        alert(e)
-        window.location.pathname = process.env.PUBLIC_URL + '/new'
+    // console.log(this.auth)
+    const docRef = doc(db, "food", "recipies");
+    try {
+      const response = await setDoc(docRef, recipe, { merge: true });
+      window.location.pathname = process.env.PUBLIC_URL + "/home";
+    } catch (e) {
+      alert(e);
+      window.location.pathname = process.env.PUBLIC_URL + "/new";
     }
   };
 
@@ -80,6 +87,19 @@ export class NewRecipie extends Component {
             />
           </label>
           <label className="label mt-4 justify-right ">
+            <span className="label-text ">Enter image Link</span>
+          </label>
+          <label className="input lg:input-lg sm:input-sm input-xs md:input-md justify-left">
+            <input
+              name="image"
+              type="text"
+              value={this.state.image}
+              onChange={this.handleInputChange}
+              placeholder="https://picsum.photos/seed/picsum/200/300"
+              className="input lg:input-lg md:input-md input-sm input-bordered "
+            />
+          </label>
+          <label className="label mt-4 justify-right ">
             <span className="label-text ">Enter Cook Time</span>
           </label>
           <label className="input lg:input-lg sm:input-sm input-xs md:input-md justify-left">
@@ -102,6 +122,7 @@ export class NewRecipie extends Component {
             onChange={this.handleInputChange}
           >
             <option>Easy</option>
+            <option>Lil Hard</option>
             <option>Hard</option>
             <option>Chef</option>
             <option>Mater Chef</option>
